@@ -41,7 +41,7 @@ Page {
         }
 
         Component.onDestruction: {
-            dbus.call("Quit")
+            //dbus.call("Quit")
         }
     }
 

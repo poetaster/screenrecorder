@@ -17,7 +17,7 @@ SettingsToggle {
         service: "org.coderus.screenrecorder"
         path: "/org/coderus/screenrecorder"
         iface: "org.coderus.screenrecorder"
-        bus: DBus.SystemBus
+        bus: DBus.SessionBus
 
         signalsEnabled: true
 
@@ -51,7 +51,7 @@ SettingsToggle {
 
 
     name: "Record screen"
-    icon.source: "image://theme/icon-m-screenrecorder-toggle"
+    icon.source: "image://theme/icon-m-camera"
     checked: active
     active: serviceState > 1
     busy: serviceState > 2
@@ -75,7 +75,7 @@ SettingsToggle {
 
     Notification {
         id: notification
-        icon: "image://theme/icon-m-screenrecorder-toggle"
+        icon: "image://theme/icon-m-camera"
         appIcon: "image://theme/screenrecorder-gui"
         appName: "Screenrecorder"
         category: "x-nemo.general.warning"
