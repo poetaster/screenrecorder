@@ -6,7 +6,8 @@ Exec=screenrecorder-gui
 Name=Screenrecorder
 
 [X-Sailjail]
-OrganizationName=org.coderus
-ApplicationName=screenrecorder-gui
-Permissions=Compatibility;Audio;Camera;MediaIndexing;RemovableMedia;UserDirs;
-ExecDBus=/usr/sinb/screenrecorder --daemon --dbus
+Sandboxing=Disabled
+#OrganizationName=org.coderus
+#ApplicationName=screenrecorder-gui
+#Permissions=Compatibility;Audio;Camera;MediaIndexing;RemovableMedia;UserDirs;
+#ExecDBus=/usr/sinb/screenrecorder --daemon --dbus
