@@ -5,18 +5,8 @@ import Nemo.Configuration 1.0
 
 Page {
     id: page
+    property bool startedFromToggle:false
 
-    Timer {
-        interval: 1000
-        repeat: false
-        running: true
-        onTriggered: {
-            var initialState = dbus.typedCall("GetState", [], function(initialState) {
-                console.log("Initial state:", initialState)
-                serviceState = initialState
-            })
-        }
-    }
 
     DBusInterface {
         id: dbus
@@ -28,20 +18,27 @@ Page {
         signalsEnabled: true
 
         function stateChanged(newState) {
-            console.log(newState)
             serviceState = newState
-            if (serviceState == 2) {
-                filenameLabel.text = ""
-            }
+            console.log(serviceState)
         }
 
         function recordingFinished(filename) {
-            console.log(filename)
-            filenameLabel.text = filename
+            if (startedFromToggle) {
+                notification.body = filename
+                notification.publish()
+                startedFromToggle = false
+            }
         }
 
         Component.onDestruction: {
-            //dbus.call("Quit")
+            //call("Quit")
+        }
+
+        Component.onCompleted: {
+            dbus.typedCall("GetState", [], function(initialState) {
+                serviceState = initialState
+                console.log(serviceState)
+            });
         }
     }
 
@@ -164,6 +161,7 @@ Page {
                 }
                 enabled: serviceState > 0 && serviceState < 3
                 onClicked: {
+                    startedFromToggle = true
                     trigger()
                 }
                 function trigger() {
@@ -196,5 +194,11 @@ Page {
                 actionButton.trigger()
             }
         }
+    }
+    Component.onCompleted: {
+        dbus.typedCall("GetState", [], function(initialState) {
+            serviceState = initialState
+            console.log(serviceState)
+        });
     }
 }

@@ -23,7 +23,7 @@ BuildRequires:  systemd
 BuildRequires:  sailfish-svg2png
 
 %description
-Lipstick recorder client
+Lipstick screenrecorder client
 
 %prep
 %setup -q -n %{name}-%{version}
