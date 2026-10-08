@@ -1,11 +1,12 @@
 %define theme sailfish-default
+%define _binary_payload w2.xzdio
 
 %{!?qtc_qmake5:%define qtc_qmake5 %qmake5}
 %{!?qtc_make:%define qtc_make make}
 
 Name:       screenrecorder
 Summary:    Sailfish screen recorder
-Version:    0.3.0
+Version:    0.5.0
 Release:    1
 Group:      System/GUI/Other
 License:    GPLv2
@@ -24,6 +25,24 @@ BuildRequires:  sailfish-svg2png
 
 %description
 Lipstick screenrecorder client
+
+%if "%{?vendor}" == "chum"
+PackageName:
+Type: desktop-application
+Categories:
+ - Video
+ - Graphics
+PackagerName: Mark Washeim (poetaster)
+Custom:
+ - Repo: https://github.com/poetaster/screenrecorder
+PackageIcon: https://raw.githubusercontent.com/poetaster/screenrecorder/master/icons/256x256/screenrecorder-gui.png
+Url:
+ - Bugtracker: https://github.com/poetaster/screenrecorder/issues
+Links:
+  Homepage: https://github.com/poetaster/screenrecorder
+  Bugtracker: https://github.com/poetaster/screenrecorder/issues
+  Donation: https://liberapay.com/poetaster
+%endif
 
 %prep
 %setup -q -n %{name}-%{version}
