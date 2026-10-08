@@ -6,7 +6,7 @@
 
 Name:       screenrecorder
 Summary:    Sailfish screen recorder
-Version:    0.5.0
+Version:    0.5.1
 Release:    1
 Group:      System/GUI/Other
 License:    GPLv2
