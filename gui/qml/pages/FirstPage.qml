@@ -7,7 +7,18 @@ Page {
     id: page
     property bool startedFromToggle:false
 
-
+    Timer {
+        id: repeatedGetState
+        interval: 1000
+        repeat: false
+        onTriggered: {
+            dbus.typedCall("GetState", [], function(initialState) {
+                serviceState = initialState
+            }, function() {
+                repeatedGetState.start()
+            })
+        }
+    }
     DBusInterface {
         id: dbus
         service: "org.coderus.screenrecorder"
@@ -20,6 +31,9 @@ Page {
         function stateChanged(newState) {
             serviceState = newState
             console.log(serviceState)
+            if (repeatedGetState.running) {
+                repeatedGetState.stop()
+            }
         }
 
         function recordingFinished(filename) {
@@ -200,5 +214,8 @@ Page {
             serviceState = initialState
             console.log(serviceState)
         });
+        if (serviceState == 0) {
+            repeatedGetState.start()
+        }
     }
 }
