@@ -57,15 +57,8 @@ systemctl-user stop screenrecorder.service
 %{_datadir}/applications/screenrecorder-gui.desktop
 %{_datadir}/icons/hicolor/*/apps/screenrecorder-gui.png
 
-%{_datadir}/themes/%{theme}/meegotouch/z1.0/icons/*.png
-%{_datadir}/themes/%{theme}/meegotouch/z1.25/icons/*.png
-%{_datadir}/themes/%{theme}/meegotouch/z1.5/icons/*.png
-%{_datadir}/themes/%{theme}/meegotouch/z1.5-large/icons/*.png
-%{_datadir}/themes/%{theme}/meegotouch/z1.75/icons/*.png
-%{_datadir}/themes/%{theme}/meegotouch/z2.0/icons/*.png
-
 %{_datadir}/dbus-1/services/org.coderus.screenrecorder.service
 %{_userunitdir}/screenrecorder.service
-
+%{_datadir}/dbus-1/system.d
 %{_datadir}/jolla-settings/entries/screenrecorder.json
 %{_datadir}/jolla-settings/pages/screenrecorder/ScreenrecorderToggle.qml

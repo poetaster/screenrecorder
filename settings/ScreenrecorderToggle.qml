@@ -2,6 +2,7 @@ import QtQuick 2.1
 import Sailfish.Silica 1.0
 import Nemo.DBus 2.0
 import com.jolla.settings 1.0
+import com.jolla.settings.system 1.0
 import Nemo.Notifications 1.0
 import org.nemomobile.lipstick 0.1 as Lipstick
 
@@ -10,19 +11,6 @@ SettingsToggle {
 
     property int serviceState
     property bool startedFromToggle
-
-    Timer {
-        id: repeatedGetState
-        interval: 1000
-        repeat: false
-        onTriggered: {
-            dbus.typedCall("GetState", [], function(initialState) {
-                serviceState = initialState
-            }, function() {
-                repeatedGetState.start()
-            })
-        }
-    }
 
     DBusInterface {
         id: dbus
@@ -34,10 +22,6 @@ SettingsToggle {
         signalsEnabled: true
 
         function stateChanged(newState) {
-            if (repeatedGetState.running) {
-                repeatedGetState.stop()
-            }
-
             serviceState = newState
         }
 
@@ -45,23 +29,23 @@ SettingsToggle {
             if (startedFromToggle) {
                 notification.body = filename
                 notification.publish()
-
                 startedFromToggle = false
             }
         }
 
         Component.onDestruction: {
-            call("Quit")
+            //call("Quit")
         }
 
         Component.onCompleted: {
-            repeatedGetState.start()
+            dbus.typedCall("GetState", [], function(initialState) {
+                serviceState = initialState
+            });
         }
     }
 
     Lipstick.LauncherItem {
         id: settingsLauncher
-
         filePath: "/usr/share/applications/screenrecorder-gui.desktop"
     }
 

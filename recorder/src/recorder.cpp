@@ -150,7 +150,7 @@ Recorder::Options Recorder::readOptions()
 {
     MDConfGroup dconf(QStringLiteral("/org/coderus/screenrecorder"));
     return {
-        dconf.value(QStringLiteral("destination"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString(),
+        dconf.value(QStringLiteral("destination"), QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)).toString(),
         dconf.value(QStringLiteral("fps"), 24).toInt(),
         dconf.value(QStringLiteral("buffers"), 48).toInt(),
         dconf.value(QStringLiteral("fullmode"), false).toBool(),

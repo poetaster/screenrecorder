@@ -111,15 +111,17 @@ void DBusAdaptor::SetSmooth(bool smooth)
 bool DBusAdaptor::registerService()
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
-    const bool registerObjectSuccess = bus.registerObject(s_dbusObject, s_dbusInterface, qApp);
-    qCDebug(logadaptor) << Q_FUNC_INFO << "Object registered:" << registerObjectSuccess;
-    if (!registerObjectSuccess) {
-        qCWarning(logadaptor) << Q_FUNC_INFO << bus.lastError().message();
-        return false;
-    }
+
     const bool registerServiceSuccess = bus.registerService(s_dbusService);
     qCDebug(logadaptor) << Q_FUNC_INFO << "Service registered:" << registerServiceSuccess;
     if (!registerServiceSuccess) {
+        qCWarning(logadaptor) << Q_FUNC_INFO << bus.lastError().message();
+        return false;
+    }
+
+    const bool registerObjectSuccess = bus.registerObject(s_dbusObject, s_dbusInterface, qApp);
+    qCDebug(logadaptor) << Q_FUNC_INFO << "Object registered:" << registerObjectSuccess;
+    if (!registerObjectSuccess) {
         qCWarning(logadaptor) << Q_FUNC_INFO << bus.lastError().message();
         return false;
     }
