@@ -2,6 +2,7 @@ import QtQuick 2.6
 import Sailfish.Silica 1.0
 import Nemo.DBus 2.0
 import Nemo.Configuration 1.0
+import Nemo.Notifications 1.0
 
 Page {
     id: page
@@ -218,4 +219,15 @@ Page {
             repeatedGetState.start()
         }
     }
+    Notification {
+        id: notification
+        icon: "image://theme/icon-m-camera"
+        appIcon: "image://theme/screenrecorder-gui"
+        appName: "Screenrecorder"
+        category: "x-nemo.general.warning"
+        previewBody: body
+        previewSummary: summary
+        summary: "Recording completed"
+    }
+
 }
