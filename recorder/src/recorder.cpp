@@ -195,7 +195,7 @@ void Recorder::start()
     m_size.setHeight(qRound(m_size.height() * m_options.scale));
 
 
-    const QString dateString = QDateTime::currentDateTime().toString(QStringLiteral("dd-MM-yy_HH-mm-ss"));
+    const QString dateString = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd_HHmmss"));
     const QString filename = QStringLiteral("/screenrecorder-%1.avi").arg(dateString);
 
     m_avi->setFileName(m_options.destination + filename);
