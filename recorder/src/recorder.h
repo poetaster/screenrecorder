@@ -47,6 +47,7 @@ public:
         int quality;
         bool smooth;
         int startDelay;
+        bool convert;
         bool daemonize;
     };
 
@@ -59,6 +60,7 @@ public:
         StatusReady,
         StatusRecording,
         StatusSaving,
+        StatusConverting,
     };
     Q_ENUM(Status)
     Status status() const;
@@ -90,6 +92,7 @@ private:
     static void frame(void *data, lipstick_recorder *recorder, wl_buffer *buffer, uint32_t time, int transform);
     static void failed(void *data, lipstick_recorder *recorder, int result, wl_buffer *buffer);
     static void cancel(void *data, lipstick_recorder *recorder, wl_buffer *buffer);
+    QString convert(const QString & filein);
 
     wl_display *m_display = nullptr;
     wl_registry *m_registry = nullptr;

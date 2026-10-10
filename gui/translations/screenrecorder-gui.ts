@@ -12,84 +12,84 @@
 <context>
     <name>FirstPage</name>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="91"/>
+        <location filename="../qml/pages/FirstPage.qml" line="82"/>
         <source>Screenrecorder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="101"/>
+        <location filename="../qml/pages/FirstPage.qml" line="92"/>
         <source>Frames per second</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="102"/>
+        <location filename="../qml/pages/FirstPage.qml" line="93"/>
         <source>%1 fps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="116"/>
+        <location filename="../qml/pages/FirstPage.qml" line="107"/>
         <source>Buffers to store frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="117"/>
+        <location filename="../qml/pages/FirstPage.qml" line="108"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="125"/>
+        <location filename="../qml/pages/FirstPage.qml" line="116"/>
         <source>Store all frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="140"/>
+        <location filename="../qml/pages/FirstPage.qml" line="131"/>
         <source>JPEG frames quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="141"/>
-        <location filename="../qml/pages/FirstPage.qml" line="155"/>
+        <location filename="../qml/pages/FirstPage.qml" line="132"/>
+        <location filename="../qml/pages/FirstPage.qml" line="146"/>
         <source>%1%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="154"/>
+        <location filename="../qml/pages/FirstPage.qml" line="145"/>
         <source>Frames scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="164"/>
+        <location filename="../qml/pages/FirstPage.qml" line="155"/>
         <source>Apply smooth transformation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/pages/FirstPage.qml" line="165"/>
+        <source>Convert to MP4 (smaller files)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/pages/FirstPage.qml" line="179"/>
-        <source>Start delay</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/FirstPage.qml" line="180"/>
-        <source>%1 s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/FirstPage.qml" line="192"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="194"/>
+        <location filename="../qml/pages/FirstPage.qml" line="181"/>
         <source>Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="196"/>
+        <location filename="../qml/pages/FirstPage.qml" line="183"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="198"/>
+        <location filename="../qml/pages/FirstPage.qml" line="185"/>
         <source>Saving, please wait</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/FirstPage.qml" line="187"/>
+        <source>Converting, please wait</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

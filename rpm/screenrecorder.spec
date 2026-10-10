@@ -6,14 +6,17 @@
 
 Name:       screenrecorder
 Summary:    Sailfish screen recorder
-Version:    0.5.1
+Version:    0.5.2
 Release:    1
 Group:      System/GUI/Other
 License:    GPLv2
 URL:        https://github.com/coderus/screenrecorder
 Source0:    %{name}-%{version}.tar.bz2
-Requires:   sailfishsilica-qt5 >= 0.10.9
+Requires:   sailfishsilica-qt5 >= 0.10.9a
 Requires:   qt5-qtmultimedia
+Requires: ffmpeg
+Requires: ffmpeg-tools
+
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
@@ -28,6 +31,7 @@ BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(mlite5)
 BuildRequires:  systemd
 BuildRequires:  sailfish-svg2png
+
 
 %description
 Lipstick screenrecorder client
