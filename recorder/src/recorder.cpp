@@ -157,6 +157,7 @@ Recorder::Options Recorder::readOptions()
         dconf.value(QStringLiteral("scale"), 1.0f).toDouble(),
         dconf.value(QStringLiteral("quality"), 100).toInt(),
         dconf.value(QStringLiteral("smooth"), false).toBool(),
+        dconf.value(QStringLiteral("convert"), true).toBool(),
         false,
     };
 }
@@ -230,11 +231,84 @@ QString Recorder::stop()
     m_pool->waitForDone();
     m_avi->close();
 
+    // Convert the file to MP4 if requested
+
+    QString file(m_avi->fileName());
+
+    // this should not be neccessary, we have a bug in options init?
+    MDConfGroup dconf(QStringLiteral("/org/coderus/screenrecorder"));
+    bool conv = dconf.value(QStringLiteral("convert"), true).toBool();
+    if (conv) {
+        file = convert(m_avi->fileName());
+    }
+    else {
+        qCDebug(logrecorder) << "No converstion, leaving as AVI";
+    }
+
     setStatus(StatusReady);
 
     lipstick_recorder_destroy(m_recorder);
 
-    return m_avi->fileName();
+    return file;
+}
+
+QString Recorder::convert(const QString & filein)
+{
+    setStatus(StatusConverting);
+    qCDebug(logrecorder) << "Converting to MP4";
+
+
+    ///usr/bin/ffmpeg,-progress,-,-nostats,-hide_banner,-y,-i,
+    //home/defaultuser/Videos/screenrecorder-20261010_181758.avi,
+    //-c:v,vp9,-filter:v,tblend,scale=iw/2:ih/2,-c:a,copy,-r,10,
+    //home/defaultuser/Videos/screenrecorder-20261010_181758_edit.mkv
+
+    QString fileout(filein);
+    fileout.truncate(filein.lastIndexOf(QStringLiteral(".")));
+    fileout.append(QStringLiteral(".mkv"));
+    QStringList arguments = {QStringLiteral("-i"),
+                             m_avi->fileName(),
+                             QStringLiteral("-c:v"),
+                             QStringLiteral("vp9"),
+                             QStringLiteral("-filter:v"),
+                             QStringLiteral("tblend,scale=iw/2:ih/2"),
+                             QStringLiteral("-c:a"),
+                             QStringLiteral("copy"),
+                             QStringLiteral("-r"),
+                             QStringLiteral("10"),
+                             fileout};
+    /* david's original
+    QStringList arguments = {QStringLiteral("-i"),
+                             m_avi->fileName(),
+                             QStringLiteral("-y"),
+                             QStringLiteral("-crf"),
+                             QStringLiteral("28"),
+                             QStringLiteral("-preset"),
+                             QStringLiteral("slow"),
+                             //QStringLiteral("-filter:v"),
+                             //QStringLiteral("tblend"),
+                             //QStringLiteral("tblend,scale=iw/2:ih/2"),
+                             QStringLiteral("-c:a"),
+                             QStringLiteral("libfdk_aac"),
+                             QStringLiteral("-b:a"),
+                             QStringLiteral("192k"),
+                             QStringLiteral("-ac"),
+                             QStringLiteral("2"),
+                             fileout};
+                             */
+    int result = QProcess::execute(QStringLiteral("/usr/bin/ffmpeg"), arguments);
+    if (result == 0) {
+        printf("wrote");
+        qCDebug(logrecorder) << "Converted as " << fileout;
+        QFile::remove(filein);
+    }
+    else {
+        printf("failed");
+        qCDebug(logrecorder) << "Converted failed with code: " << result;
+        fileout = filein;
+    }
+
+    return fileout;
 }
 
 void Recorder::handleShutDown()

@@ -157,3 +157,16 @@ void DBusAdaptor::Stop()
     const QString filename = Recorder::instance()->stop();
     emit RecordingFinished(filename);
 }
+
+
+bool DBusAdaptor::GetConvert() const
+{
+    return Recorder::instance()->m_options.convert;
+}
+
+
+void DBusAdaptor::SetConvert(bool convert)
+{
+    Recorder::instance()->m_options.convert = convert;
+    qCDebug(logadaptor) << Q_FUNC_INFO << convert;
+}
