@@ -25,6 +25,7 @@
 class QScreen;
 class QAviWriter;
 class QThreadPool;
+class QTimer;
 
 struct wl_display;
 struct wl_registry;
@@ -45,6 +46,7 @@ public:
         double scale;
         int quality;
         bool smooth;
+        int startDelay;
         bool daemonize;
     };
 
@@ -66,6 +68,7 @@ public:
 
 signals:
     void statusChanged(Status status);
+    void tick();
 
 public slots:
     void init();
@@ -74,6 +77,8 @@ public slots:
     void handleShutDown();
 
 private slots:
+    void startDelayTick();
+    void beginRecording();
     void recordFrame();
     void saveFrame();
 
@@ -105,6 +110,8 @@ private:
 
     QThreadPool *m_pool;
     QTimer *m_timer;
+    QTimer *m_startTimer;
+    int m_delayRemaining = 0;
 
     Status m_status = StatusIdle;
 

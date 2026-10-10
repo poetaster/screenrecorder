@@ -55,6 +55,7 @@ public slots:
 signals:
     void StateChanged(int state);
     void RecordingFinished(const QString &fileName);
+    void Tick();
 
 };
 

@@ -19,6 +19,7 @@ DBusAdaptor::DBusAdaptor(QObject *parent)
     setAutoRelaySignals(true);
 
     connect(Recorder::instance(), &Recorder::statusChanged, this, &DBusAdaptor::StateChanged);
+    connect(Recorder::instance(), &Recorder::tick, this, &DBusAdaptor::Tick);
 }
 
 DBusAdaptor::~DBusAdaptor()
