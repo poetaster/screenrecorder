@@ -1,5 +1,6 @@
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import QtMultimedia 5.6
 import Nemo.DBus 2.0
 import Nemo.Configuration 1.0
 import Nemo.Notifications 1.0
@@ -8,6 +9,10 @@ Page {
     id: page
     property bool startedFromToggle:false
 
+    MediaPlayer {
+        id: tickPlayer
+        source: Qt.resolvedUrl("../sounds/tick.wav")
+    }
     Timer {
         id: repeatedGetState
         interval: 1000
@@ -35,6 +40,10 @@ Page {
             if (repeatedGetState.running) {
                 repeatedGetState.stop()
             }
+        }
+
+        function tick() {
+            tickPlayer.play()
         }
 
         function recordingFinished(filename) {
@@ -66,6 +75,7 @@ Page {
         property real scale: 1.0
         property int quality: 100
         property bool smooth: false
+        property int startdelay: 0
         property bool convert: false
     }
 
@@ -157,6 +167,20 @@ Page {
                 automaticCheck: false
                 onClicked: {
                     conf.smooth = !checked
+                }
+            }
+
+            Slider {
+                id: startDelaySlider
+                width: parent.width
+                minimumValue: 0
+                maximumValue: 10
+                stepSize: 1
+                value: conf.startdelay
+                label: qsTr("Start delay")
+                valueText: qsTr("%1 s").arg(value)
+                onReleased: {
+                    conf.startdelay = value
                 }
             }
 

@@ -100,6 +100,7 @@ Recorder::Recorder(const Options &options, QObject *parent)
     , m_options(options)
     , m_pool(new QThreadPool(this))
     , m_timer(new QTimer(this))
+    , m_startTimer(new QTimer(this))
 {
     qCDebug(logrecorder) << "Writing to" << options.destination;
     qCDebug(logrecorder) << "Fps:" << options.fps;
@@ -121,6 +122,10 @@ Recorder::Recorder(const Options &options, QObject *parent)
     m_timer->setInterval(1000 / m_options.fps);
     m_timer->setSingleShot(true);
     connect(m_timer, &QTimer::timeout, this, &Recorder::saveFrame);
+
+    m_startTimer->setSingleShot(true);
+    m_startTimer->setInterval(1000);
+    connect(m_startTimer, &QTimer::timeout, this, &Recorder::startDelayTick);
 
     s_instance = this;
 }
@@ -157,6 +162,7 @@ Recorder::Options Recorder::readOptions()
         dconf.value(QStringLiteral("scale"), 1.0f).toDouble(),
         dconf.value(QStringLiteral("quality"), 100).toInt(),
         dconf.value(QStringLiteral("smooth"), false).toBool(),
+        dconf.value(QStringLiteral("startdelay"), 0).toInt(),
         dconf.value(QStringLiteral("convert"), true).toBool(),
         false,
     };
@@ -186,6 +192,39 @@ void Recorder::start()
     if (!m_manager)
         qFatal("The lipstick_recorder_manager global is not available.");
 
+    if (m_status != StatusReady || m_delayRemaining > 0) {
+        qCWarning(logrecorder) << Q_FUNC_INFO << "Recorder not ready or busy!";
+        return;
+    }
+
+    if (m_options.daemonize) {
+        const bool daemonize = true;
+        m_options = readOptions();
+        m_options.daemonize = daemonize;
+    }
+
+    m_delayRemaining = qBound(0, m_options.startDelay, 10);
+    if (m_delayRemaining > 0) {
+        qCDebug(logrecorder) << "Delayed start in" << m_delayRemaining << "s";
+        m_startTimer->start();
+        return;
+    }
+
+    beginRecording();
+}
+
+void Recorder::startDelayTick()
+{
+    emit tick();
+    if (--m_delayRemaining > 0) {
+        m_startTimer->start();
+        return;
+    }
+    beginRecording();
+}
+
+void Recorder::beginRecording()
+{
     if (m_status != StatusReady) {
         qCWarning(logrecorder) << Q_FUNC_INFO << "Recorder not ready or busy!";
         return;
@@ -220,6 +259,13 @@ void Recorder::start()
 
 QString Recorder::stop()
 {
+    if (m_delayRemaining > 0) {
+        qCDebug(logrecorder) << Q_FUNC_INFO << "Cancelled delayed start";
+        m_startTimer->stop();
+        m_delayRemaining = 0;
+        return QString();
+    }
+
     if (m_status != StatusRecording) {
         qCWarning(logrecorder) << Q_FUNC_INFO << "Not recording!";
         return QString();
@@ -318,6 +364,8 @@ void Recorder::handleShutDown()
     }
     m_shutdown = true;
 
+    m_startTimer->stop();
+    m_delayRemaining = 0;
     qCDebug(logrecorder) << "File saved to:" << stop();
     qGuiApp->sendEvent(qGuiApp, new QEvent(QEvent::Quit));
 }

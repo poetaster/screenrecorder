@@ -13,6 +13,7 @@ License:    GPLv2
 URL:        https://github.com/coderus/screenrecorder
 Source0:    %{name}-%{version}.tar.bz2
 Requires:   sailfishsilica-qt5 >= 0.10.9a
+Requires:   qt5-qtmultimedia
 Requires: ffmpeg
 Requires: ffmpeg-tools
 
