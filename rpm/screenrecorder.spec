@@ -6,15 +6,15 @@
 
 Name:       screenrecorder
 Summary:    Sailfish screen recorder
-Version:    0.5.2
+Version:    0.5.3
 Release:    1
 Group:      System/GUI/Other
 License:    GPLv2
 URL:        https://github.com/coderus/screenrecorder
 Source0:    %{name}-%{version}.tar.bz2
 Requires:   sailfishsilica-qt5 >= 0.10.9a
-Requires: ffmpeg
-Requires: ffmpeg-tools
+Requires:   ffmpeg
+Requires:   ffmpeg-tools
 
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Qml)

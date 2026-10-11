@@ -4,18 +4,18 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <location filename="../qml/cover/CoverPage.qml" line="10"/>
-        <source> Screen Recording...</source>
+        <location filename="../qml/cover/CoverPage.qml" line="14"/>
+        <source>Recording...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/cover/CoverPage.qml" line="11"/>
-        <source> Screen ready ...</source>
+        <location filename="../qml/cover/CoverPage.qml" line="15"/>
+        <source>Recorder ready ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/cover/CoverPage.qml" line="12"/>
-        <source>Screen Saving...</source>
+        <location filename="../qml/cover/CoverPage.qml" line="16"/>
+        <source>Saving...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

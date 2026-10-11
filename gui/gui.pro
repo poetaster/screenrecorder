@@ -12,6 +12,7 @@ OTHER_FILES += \
     qml/pages/FirstPage.qml \
     qml/pages/SecondPage.qml \
     qml/sounds/tick.wav \
+    qml/*.png \
     rpm/qml-test.spec \
     translations/*.ts \
     qml-test.desktop
