@@ -12,6 +12,7 @@ Page {
     MediaPlayer {
         id: tickPlayer
         source: Qt.resolvedUrl("../sounds/tick.wav")
+        autoPlay: false
     }
     Timer {
         id: repeatedGetState
@@ -29,23 +30,23 @@ Page {
         id: delayTimer
         interval: 1000
         repeat: false
+        running:false
         onTriggered: {
             trigger();
         }
         function trigger() {
             if (serviceState == 1) {
                 dbus.call("Start")
-            } else if (serviceState == 2) {
-                dbus.call("Stop")
             }
-            delayTimer.running = false;
-            tickTimer.running = false;
+            delayTimer.stop();
+            tickTimer.stop();
         }
     }
     Timer {
         id: tickTimer
         interval: 1000
         repeat: true
+        running:false
         onTriggered: {
             tickPlayer.play()
         }
@@ -62,7 +63,6 @@ Page {
 
         function stateChanged(newState) {
             serviceState = newState
-            console.log(serviceState)
             if (repeatedGetState.running) {
                 repeatedGetState.stop()
             }
@@ -83,7 +83,6 @@ Page {
         Component.onCompleted: {
             dbus.typedCall("GetState", [], function(initialState) {
                 serviceState = initialState
-                console.log(serviceState)
             });
         }
     }
@@ -97,7 +96,8 @@ Page {
         property real scale: 1.0
         property int quality: 100
         property bool smooth: false
-        property bool startdelay: 0
+        property bool convert: false
+        property int startdelay: 0
     }
 
     SilicaFlickable {
@@ -204,6 +204,15 @@ Page {
                 }
             }
 
+            TextSwitch {
+                id: convertSwitch
+                text: qsTr("Convert to MP4 (smaller files)")
+                checked: conf.convert
+                automaticCheck: false
+                onClicked: {
+                    conf.convert = !checked
+                }
+            }
             Button {
                 id: actionButton
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -217,13 +226,22 @@ Page {
                         return qsTr("Stop")
                     case 3:
                         return qsTr("Saving, please wait")
+                    case 4:
+                        return qsTr("Converting, please wait")
                     }
                 }
                 enabled: serviceState > 0 && serviceState < 3
                 onClicked: {
-                    startedFromToggle = true
-                    delayTimer.running = true
-                    tickTimer.running = true
+                    trigger()
+                }
+                function trigger() {
+                    if (serviceState == 1) {
+                        startedFromToggle = true
+                        delayTimer.running = true
+                        tickTimer.running = true
+                    } else if (serviceState == 2) {
+                        dbus.call("Stop")
+                    }
                 }
 
             }
@@ -253,7 +271,7 @@ Page {
     Component.onCompleted: {
         dbus.typedCall("GetState", [], function(initialState) {
             serviceState = initialState
-            console.log(serviceState)
+            delayTimer.interval = conf.startdelay * 1000
         });
         if (serviceState == 0) {
             repeatedGetState.start()

@@ -13,25 +13,29 @@ SettingsToggle {
 
     property int serviceState
     property bool startedFromToggle
+    property int tickCount
+/*
     MediaPlayer {
         id: tickPlayer
-        source: Qt.resolvedUrl("/usr/share/screenrecorder-gui.desktop/qml/sounds/tick.wav")
+        source: Qt.resolvedUrl("/usr/share/screenrecorder-gui/qml/sounds/tick.wav")
+        playing:false
     }
+*/
+    // For some reason, neither delay nor tick timer work correctly
+    // perhaps the settings and not being read?
+ /*
     Timer {
         id: delayTimer
-        interval: conf.startdelay
+        interval: conf.startdelay > 0 ? conf.startdelay * 1000 : 0
         repeat: false
+        running: false
         onTriggered: {
             trigger();
         }
         function trigger() {
-            if (serviceState == 1) {
-                dbus.call("Start")
-            } else if (serviceState == 2) {
-                dbus.call("Stop")
-            }
-            delayTimer.running = false;
-            tickTimer.running = false;
+            tickTimer.stop()
+            dbus.call("Start")
+
         }
     }
     Timer {
@@ -39,9 +43,12 @@ SettingsToggle {
         interval: 1000
         repeat: true
         onTriggered: {
-            tickPlayer.play()
+            if (tickCount < conf.startdelay)  tickPlayer.play()
+            tickCount++
+
         }
     }
+*/
     ConfigurationGroup {
         id: conf
         path: "/org/coderus/screenrecorder"
@@ -51,7 +58,8 @@ SettingsToggle {
         property real scale: 1.0
         property int quality: 100
         property bool smooth: false
-        property bool startdelay: 0
+        property bool convert: false
+        property int startdelay: 0
     }
     DBusInterface {
         id: dbus
@@ -82,6 +90,7 @@ SettingsToggle {
             dbus.typedCall("GetState", [], function(initialState) {
                 serviceState = initialState
             });
+           // delayTimer.interval = conf.startdelay * 1000
         }
     }
 
@@ -100,7 +109,20 @@ SettingsToggle {
                                   : "Saving..."
 
     onToggled: {
-        delayTimer.running = true
+        if (serviceState == 1) {
+            startedFromToggle = true
+            dbus.call("Start")
+            //sadly, timers are borked
+            /*
+            if (conf.startdelay > 0 ) {
+                delayTimer.start()
+                tickTimer.start()
+            } else {
+                dbus.call("Start")
+            }*/
+        } else if (serviceState == 2) {
+            dbus.call("Stop")
+        }
     }
 
     menu: ContextMenu {

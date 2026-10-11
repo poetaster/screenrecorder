@@ -6,9 +6,13 @@ CoverBackground {
     Label {
         id: label
         anchors.centerIn: parent
-        text: qsTr("Screenrecorder")
-    }
+        text: {
+            if ( serviceState == 2 ) return qsTr(" Screen Recording...")
+            if ( serviceState == 1 ) return qsTr(" Screen ready ...")
+            if ( serviceState > 2 ) return qsTr("Screen Saving...")
+        }
 
+    }
     CoverActionList {
         id: coverAction
         enabled: serviceState > 0 && serviceState < 3

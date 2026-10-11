@@ -265,7 +265,7 @@ QString Recorder::convert(const QString & filein)
 
     QString fileout(filein);
     fileout.truncate(filein.lastIndexOf(QStringLiteral(".")));
-    fileout.append(QStringLiteral(".mkv"));
+    fileout.append(QStringLiteral(".mp4"));
     QStringList arguments = {QStringLiteral("-i"),
                              m_avi->fileName(),
                              QStringLiteral("-c:v"),
@@ -276,6 +276,8 @@ QString Recorder::convert(const QString & filein)
                              QStringLiteral("copy"),
                              QStringLiteral("-r"),
                              QStringLiteral("10"),
+                             QStringLiteral("-q"),
+                             QStringLiteral("28"),
                              fileout};
     /* david's original
     QStringList arguments = {QStringLiteral("-i"),
