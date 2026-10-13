@@ -266,38 +266,35 @@ QString Recorder::convert(const QString & filein)
     QString fileout(filein);
     fileout.truncate(filein.lastIndexOf(QStringLiteral(".")));
     fileout.append(QStringLiteral(".mp4"));
-    QStringList arguments = {QStringLiteral("-i"),
+    // mark's vp9
+    /*
+    QStringList arguments = {QStringLiteral("-y"),
+                             QStringLiteral("-i"),
                              m_avi->fileName(),
                              QStringLiteral("-c:v"),
                              QStringLiteral("vp9"),
-                             QStringLiteral("-filter:v"),
-                             QStringLiteral("tblend,scale=iw/2:ih/2"),
-                             QStringLiteral("-c:a"),
-                             QStringLiteral("copy"),
-                             QStringLiteral("-r"),
-                             QStringLiteral("10"),
-                             QStringLiteral("-q"),
+                             QStringLiteral("-crf"),
                              QStringLiteral("28"),
+                             QStringLiteral("-b:v"),
+                             QStringLiteral("0"),
+                             QStringLiteral("-row-mt"),
+                             QStringLiteral("1"),
+                             QStringLiteral("-an"),
                              fileout};
-    /* david's original
+    */
+    /* david's original*/
     QStringList arguments = {QStringLiteral("-i"),
                              m_avi->fileName(),
                              QStringLiteral("-y"),
-                             QStringLiteral("-crf"),
-                             QStringLiteral("28"),
+                             QStringLiteral("-q:v"),
+                             QStringLiteral("2"),
+                             QStringLiteral("-pix_fmt"),
+                             QStringLiteral("yuv420p"),
                              QStringLiteral("-preset"),
                              QStringLiteral("slow"),
-                             //QStringLiteral("-filter:v"),
-                             //QStringLiteral("tblend"),
-                             //QStringLiteral("tblend,scale=iw/2:ih/2"),
-                             QStringLiteral("-c:a"),
-                             QStringLiteral("libfdk_aac"),
-                             QStringLiteral("-b:a"),
-                             QStringLiteral("192k"),
-                             QStringLiteral("-ac"),
-                             QStringLiteral("2"),
+                             QStringLiteral("-movflags"),
+                             QStringLiteral("+faststart"),
                              fileout};
-                             */
     int result = QProcess::execute(QStringLiteral("/usr/bin/ffmpeg"), arguments);
     if (result == 0) {
         printf("wrote");
@@ -349,11 +346,9 @@ void Recorder::saveFrame()
     if (!m_lastFrame) {
         return;
     }
-
     if (m_shutdown) {
         return;
     }
-
     QAviWriter *avi = m_avi;
     QPixmap pix = m_lastFrame->pixmap;
     int quality = m_options.quality;
@@ -416,12 +411,18 @@ void Recorder::frame(void *data, lipstick_recorder *recorder, wl_buffer *buffer,
     QAviWriter *avi = rec->m_avi;
     QPixmap pix = buf->pixmap;
     int quality = rec->m_options.quality;
-    QtConcurrent::run(rec->m_pool, [avi, pix, quality] {
-        avi->addFrame(pix, "JPG", quality);
-    });
     if (rec->m_options.fullMode) {
-        rec->m_timer->start();
+        // Constant-fps mode: only the fps timer writes frames (see saveFrame()).
+        // Here we just record the latest frame and ensure the timer is running so
+        // the output is exactly `fps` frames/second with no duplicate writes.
         rec->m_lastFrame = buf;
+        if (!rec->m_timer->isActive())
+            rec->m_timer->start();
+    } else {
+        // Changed-frames-only mode: write each delivered frame immediately.
+        QtConcurrent::run(rec->m_pool, [avi, pix, quality] {
+            avi->addFrame(pix, "JPG", quality);
+        });
     }
     buf->busy = false;
 
