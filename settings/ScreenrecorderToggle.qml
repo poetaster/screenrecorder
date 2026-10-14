@@ -59,7 +59,7 @@ SettingsToggle {
         property int quality: 100
         property bool smooth: false
         property bool convert: false
-        property int startdelay: 0
+        property int startdelay: 1
     }
     DBusInterface {
         id: dbus

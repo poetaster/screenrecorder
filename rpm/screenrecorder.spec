@@ -36,7 +36,7 @@ BuildRequires:  sailfish-svg2png
 Lipstick screenrecorder client
 
 %if "%{?vendor}" == "chum"
-PackageName:
+PackageName: screenrecorder
 Type: desktop-application
 Categories:
  - Video
