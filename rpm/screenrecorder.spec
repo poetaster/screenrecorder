@@ -7,7 +7,7 @@
 Name:       screenrecorder
 Summary:    Sailfish screen recorder
 Version:    0.5.4
-Release:    1
+Release:    2
 Group:      System/GUI/Other
 License:    GPLv2
 URL:        https://github.com/coderus/screenrecorder
